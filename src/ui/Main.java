@@ -17,6 +17,7 @@ public class Main {
 	
 	public static void main(String[] args) throws IOException {
 		String books = bReader.readLine();
+		int booksNum=Integer.parseInt(books);
 		
 		String line = bReader.readLine();
 		String[] partStrings = line.split(" ");
@@ -26,27 +27,31 @@ public class Main {
 		int moneyInt = Integer.parseInt(money);
 		
 		Arrays.sort(array);
-		System.out.println(Arrays.toString(array));
-		
-		int found = -1;
+		int found = 0;
 		int one = 0, two = 0;
-		int min = 1;
+		int count=0;
 		for (int i = 0; i < array.length ; i++) {
+		
 			int moneySearch = moneyInt-array[i];
 			found = binarySearch(array, moneySearch);
-			System.out.println("busca: " + moneySearch + "econtrado en " + found);
 			if(found>0) {
 				if(array[i]>array[found]) {
 					two = array[i];
 					one = array[found];
+				}else {
+					one=array[i];
+					two=array[found];
 				}
-			}
-			if(found>=0) {
-				System.out.println(array[found]);
+			} 
+			count++;
+			if(count==booksNum) {
+				bWriter.write("Peter should buy books whose prices are "+ one + " and " + two);
+				bWriter.flush();
 			}
 		}
-		System.out.println("compra: "+ one + " and " + two  );
-
+		
+		bReader.close();
+		bWriter.close();
 	}
 	
 	public static int binarySearch(int[] array, int x) {
