@@ -15,83 +15,101 @@ public class Main {
 	
 	public static void main(String[] args) throws IOException {
 		String lineString;
-		String output = "";
 		String books;
-		while((lineString=bReader.readLine())!=null) {
-			
-			if(lineString.equals("")) {
-				books = bReader.readLine();
-			}else {
-				books = lineString;
-			}
-			int booksNum=Integer.parseInt(books);
-			
-			if(booksNum<2 || booksNum>10000) {
-				bWriter.write("The test case is wrong, check your entry");
-				bWriter.flush();
-			}else {
+		ArrayList<String> outputs = new ArrayList<String>();
+		
+		try{
+			while((lineString=bReader.readLine())!=null) {
 				
-				String line = bReader.readLine();
-				String[] partStrings = line.split(" ");
-				int[] array = stringArraytoInt(partStrings);
+				if(lineString.equals("")) {
+					books = bReader.readLine();
+				}else {
+					books = lineString;
+				}
+				int booksNum=Integer.parseInt(books);
 				
-				if(array.length!=booksNum) {
+				if(booksNum<2 || booksNum>10000) {
 					bWriter.write("The test case is wrong, check your entry");
 					bWriter.flush();
 				}else {
-				
-					String money = bReader.readLine();
-					int moneyInt = Integer.parseInt(money);
 					
-					ArrayList<int[]> pairs = new ArrayList<int[]>();
+					String line = bReader.readLine();
+					String[] partStrings = line.split(" ");
+					int[] array = stringArraytoInt(partStrings);
 					
-					ArrayList<Integer> differences = new ArrayList<Integer>();
+					if(array.length!=booksNum) {
+						bWriter.write("The test case is wrong, check your entry");
+						bWriter.flush();
+					}else {
 					
-					Arrays.sort(array);
-					int found = 0;
-					int one = 0, two = 0;
-					int count=0;
-					for (int i = 0; i < array.length ; i++) {
-					
-						int moneySearch = moneyInt-array[i];
-						found = binarySearch(array, moneySearch);
-						if(found>0) {
-							if(array[i]>array[found]) {
-								two = array[i];
-								one = array[found];
-							}else {
-								one=array[i];
-								two=array[found];
-							}
-							
-							int[] pairsPrice = new int[2];
-							pairsPrice[0] = one;
-							pairsPrice[1]=two;
-							pairs.add(pairsPrice);
-							int difference = two-one;
-							differences.add(difference);
-							
-						} 
-						count++;
-						if(count==booksNum) {
-							
-						}
+						String money = bReader.readLine();
+						int moneyInt = Integer.parseInt(money);
+						outputs.add(solution(moneyInt, array));
+						
+						
 					}
-					int lessPrices = defineMinorPair(differences);
-					int[] finalOne = pairs.get(lessPrices);
-					one =finalOne[0];
-					two = finalOne[1];
-					output+="Peter should buy books whose prices are "+ one + " and " + two +".\n \n";
 				}
+			}
+		}catch (NumberFormatException e){
+			
+			for(String answer: outputs){
+				bWriter.write(answer);
+				bWriter.flush();
 			}
 			
 		}
 		
-		bWriter.write(output);
-		bWriter.flush();
-		
+		for(String answer: outputs){
+				bWriter.write(answer);
+				bWriter.flush();
+		}
 		bReader.close();
 		bWriter.close();
+	}
+	
+	public static String solution(int budget, int[] array){
+		String output="";
+		ArrayList<int[]> pairs = new ArrayList<int[]>();
+		ArrayList<Integer> differences = new ArrayList<Integer>();
+		
+		Arrays.sort(array);
+		int found = 0;
+		int one = 0, two = 0;
+		for (int i = 0; i < array.length ; i++) {
+		
+			int moneySearch = budget-array[i];
+			found = binarySearch(array, moneySearch);
+			if(found>0) {
+				
+				if(i==found) {
+					
+				}else if(array[i]>array[found]) {
+					two = array[i];
+					one = array[found];
+					int[] pairsPrice = new int[2];
+					pairsPrice[0] = one;
+					pairsPrice[1]=two;
+					pairs.add(pairsPrice);
+					int difference = two-one;
+					differences.add(difference);
+				}else {
+					one=array[i];
+					two=array[found];
+					int[] pairsPrice = new int[2];
+					pairsPrice[0] = one;
+					pairsPrice[1]=two;
+					pairs.add(pairsPrice);
+					int difference = two-one;
+					differences.add(difference);
+				}
+			}  
+		}
+		int lessPrices = defineMinorPair(differences);
+		int[] finalOne = pairs.get(lessPrices);
+		one =finalOne[0];
+		two = finalOne[1];
+		output="Peter should buy books whose prices are "+ one + " and " + two +".\n" + "\n";
+		return output;
 	}
 	
 	public static int defineMinorPair(ArrayList<Integer> array) {
