@@ -34,9 +34,6 @@ public class Main {
 				String line = bReader.readLine();
 				String[] partStrings = line.split(" ");
 				int[] array = stringArraytoInt(partStrings);
-				ArrayList<int[]> pairs = new ArrayList<int[]>();
-				
-				ArrayList<Integer> differences = new ArrayList<Integer>();
 				
 				if(array.length!=booksNum) {
 					bWriter.write("The test case is wrong, check your entry");
@@ -45,6 +42,10 @@ public class Main {
 				
 					String money = bReader.readLine();
 					int moneyInt = Integer.parseInt(money);
+					
+					ArrayList<int[]> pairs = new ArrayList<int[]>();
+					
+					ArrayList<Integer> differences = new ArrayList<Integer>();
 					
 					Arrays.sort(array);
 					int found = 0;
@@ -62,6 +63,7 @@ public class Main {
 								one=array[i];
 								two=array[found];
 							}
+							
 							int[] pairsPrice = new int[2];
 							pairsPrice[0] = one;
 							pairsPrice[1]=two;
@@ -70,23 +72,16 @@ public class Main {
 							differences.add(difference);
 							
 						} 
-						
 						count++;
-						
-						
+						if(count==booksNum) {
+							
+						}
 					}
-					
 					int lessPrices = defineMinorPair(differences);
 					int[] finalOne = pairs.get(lessPrices);
 					one =finalOne[0];
 					two = finalOne[1];
-					if(count==booksNum) {
-						output+="Peter should buy books whose prices are "+ one + " and " + two +"\n \n";
-					}
-					
-					
-					bWriter.write(output);
-					bWriter.flush();
+					output+="Peter should buy books whose prices are "+ one + " and " + two +".\n \n";
 				}
 			}
 			
@@ -98,7 +93,6 @@ public class Main {
 		bReader.close();
 		bWriter.close();
 	}
-	
 	
 	public static int defineMinorPair(ArrayList<Integer> array) {
 		
@@ -123,8 +117,6 @@ public class Main {
 
 	    return index;
 	}
-	
-
 	
 	public static int binarySearch(int[] array, int x) {
 		int pos = -1;
