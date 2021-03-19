@@ -5,6 +5,7 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.util.ArrayList;
 import java.util.Arrays;
 
 public class Main {
@@ -33,6 +34,9 @@ public class Main {
 				String line = bReader.readLine();
 				String[] partStrings = line.split(" ");
 				int[] array = stringArraytoInt(partStrings);
+				ArrayList<int[]> pairs = new ArrayList<int[]>();
+				
+				ArrayList<Integer> differences = new ArrayList<Integer>();
 				
 				if(array.length!=booksNum) {
 					bWriter.write("The test case is wrong, check your entry");
@@ -58,12 +62,31 @@ public class Main {
 								one=array[i];
 								two=array[found];
 							}
+							int[] pairsPrice = new int[2];
+							pairsPrice[0] = one;
+							pairsPrice[1]=two;
+							pairs.add(pairsPrice);
+							int difference = two-one;
+							differences.add(difference);
+							
 						} 
+						
 						count++;
-						if(count==booksNum) {
-							output+="Peter should buy books whose prices are "+ one + " and " + two +"\n \n";
-						}
+						
+						
 					}
+					
+					int lessPrices = defineMinorPair(differences);
+					int[] finalOne = pairs.get(lessPrices);
+					one =finalOne[0];
+					two = finalOne[1];
+					if(count==booksNum) {
+						output+="Peter should buy books whose prices are "+ one + " and " + two +"\n \n";
+					}
+					
+					
+					bWriter.write(output);
+					bWriter.flush();
 				}
 			}
 			
@@ -75,6 +98,33 @@ public class Main {
 		bReader.close();
 		bWriter.close();
 	}
+	
+	
+	public static int defineMinorPair(ArrayList<Integer> array) {
+		
+		int minValue = array.get(0);
+		int index = 0;
+	    for (int i = 1; i < array.size(); i++) {
+	    	int test = array.get(i);
+	    	if(test>0) {
+	    		if (test < minValue) {
+		            minValue = array.get(i);
+		            index = i;
+		        }
+	    	}else {
+	    		test = test*-1;
+	    		if (test < minValue) {
+		            minValue = array.get(i);
+		            index = i;
+	    		}
+	    	}
+	        
+	    }
+
+	    return index;
+	}
+	
+
 	
 	public static int binarySearch(int[] array, int x) {
 		int pos = -1;
